@@ -1,0 +1,94 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        // Prompt the user to enter a 3-digit guess
+        System.out.print("Enter a 3-digit number as your guess: ");
+        int userGuess = scanner.nextInt();
+
+        // Ensure the guess is a 3-digit number
+        if (userGuess < 100 || userGuess > 999) {
+            System.out.println("Invalid input! Please enter a 3-digit number.");
+            scanner.close();
+            return;
+        }
+
+        // Generate a random 3-digit number
+        int actualNumber = 100 + random.nextInt(900);
+
+        // Split the digits of userGuess and actualNumber
+        int userDigit1 = userGuess / 100;
+        int userDigit2 = (userGuess / 10) % 10;
+        int userDigit3 = userGuess % 10;
+
+        int actualDigit1 = actualNumber / 100;
+        int actualDigit2 = (actualNumber / 10) % 10;
+        int actualDigit3 = actualNumber % 10;
+
+        // Display the user's guess and the actual number
+        System.out.println("Your guess: " + userGuess);
+        System.out.println("Actual number: " + actualNumber);
+
+        int winnings = 0;
+
+        // Check if all digits match in the correct order
+        if (userDigit1 == actualDigit1 && userDigit2 == actualDigit2 && userDigit3 == actualDigit3) {
+            winnings = 10000;
+        }
+        // Check if all digits match but in any order
+        else if (isPermutation(userDigit1, userDigit2, userDigit3, actualDigit1, actualDigit2, actualDigit3)) {
+            winnings = 5000;
+        }
+        // Check if two of three digits match in any order
+        else if (countMatchingDigits(userDigit1, userDigit2, userDigit3, actualDigit1, actualDigit2, actualDigit3) == 2) {
+            winnings = 3000;
+        }
+        // Check if one of three digits match
+        else if (countMatchingDigits(userDigit1, userDigit2, userDigit3, actualDigit1, actualDigit2, actualDigit3) == 1) {
+            winnings = 1000;
+        }
+
+        // Display winnings
+        if (winnings > 0) {
+            System.out.println("Congratulations! You win $" + winnings);
+        } else {
+            System.out.println("Sorry, no matches. Better luck next time!");
+        }
+
+        scanner.close();
+    }
+
+    // Helper method to check if the digits are a permutation (all digits match but in any order)
+    private static boolean isPermutation(int d1, int d2, int d3, int ad1, int ad2, int ad3) {
+        int[] userDigits = {d1, d2, d3};
+        int[] actualDigits = {ad1, ad2, ad3};
+
+        java.util.Arrays.sort(userDigits);
+        java.util.Arrays.sort(actualDigits);
+
+        return java.util.Arrays.equals(userDigits, actualDigits);
+    }
+
+    // Helper method to count the number of matching digits (in any order)
+    private static int countMatchingDigits(int d1, int d2, int d3, int ad1, int ad2, int ad3) {
+        int matches = 0;
+        int[] userDigits = {d1, d2, d3};
+        int[] actualDigits = {ad1, ad2, ad3};
+
+        for (int userDigit : userDigits) {
+            for (int i = 0; i < actualDigits.length; i++) {
+                if (userDigit == actualDigits[i]) {
+                    matches++;
+                    actualDigits[i] = -1; // Mark matched digit to prevent reuse
+                    break;
+                }
+            }
+        }
+        return matches;
+    }
+}
