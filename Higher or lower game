@@ -1,0 +1,44 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        // Generate a random number between 1 and 1000
+        int targetNumber = (int) (Math.random() * 1000) + 1;
+        Scanner scanner = new Scanner(System.in);
+        int userGuess = 0;
+
+        System.out.println("Welcome to the Higher or Lower game!");
+        System.out.println("I have picked a number between 1 and 1000.");
+        System.out.println("Try to guess it!");
+
+        while (userGuess != targetNumber) {
+            System.out.print("Enter your guess: ");
+            userGuess = scanner.nextInt();
+
+            int difference = Math.abs(targetNumber - userGuess);
+
+            if (userGuess == targetNumber) {
+                System.out.println("Congratulations! You guessed the correct number!");
+            } else if (userGuess < targetNumber) {
+                if (difference > 100) {
+                    System.out.println("Way too low!");
+                } else if (difference > 20) {
+                    System.out.println("A bit too low!");
+                } else {
+                    System.out.println("Just a little low!");
+                }
+            } else {
+                if (difference > 100) {
+                    System.out.println("Way too high!");
+                } else if (difference > 20) {
+                    System.out.println("A bit too high!");
+                } else {
+                    System.out.println("Just a little high!");
+                }
+            }
+        }
+
+        System.out.println("Game over. Thanks for playing!");
+        scanner.close();
+    }
+}
