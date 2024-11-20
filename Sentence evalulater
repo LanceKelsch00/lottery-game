@@ -1,0 +1,51 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Prompt user for input
+        System.out.println("Enter a string to evaluate:");
+        String input = scanner.nextLine();
+
+        // Initialize counters
+        int charCount = 0;
+        int vowelCount = 0;
+        int consonantCount = 0;
+        int alphabetCount = 0;
+        int numericCount = 0;
+        int otherCount = 0;
+
+        // Convert the string to lowercase for easier evaluation
+        String lowerInput = input.toLowerCase();
+
+        // Loop through each character
+        for (char ch : lowerInput.toCharArray()) {
+            if (ch != ' ') { // Exclude spaces
+                charCount++;
+            }
+
+            if (Character.isLetter(ch)) { // Check if alphabet
+                alphabetCount++;
+                if ("aeiou".indexOf(ch) != -1) {
+                    vowelCount++;
+                } else {
+                    consonantCount++;
+                }
+            } else if (Character.isDigit(ch)) { // Check if numeric
+                numericCount++;
+            } else if (!Character.isLetterOrDigit(ch) && ch != ' ') { // Other characters
+                otherCount++;
+            }
+        }
+
+        // Print results
+        System.out.println("Results:");
+        System.out.println("Number of characters (excluding spaces): " + charCount);
+        System.out.println("Number of vowels: " + vowelCount);
+        System.out.println("Number of consonants: " + consonantCount);
+        System.out.println("Number of alphabet characters: " + alphabetCount);
+        System.out.println("Number of numeric characters: " + numericCount);
+        System.out.println("Number of other characters: " + otherCount);
+    }
+}
