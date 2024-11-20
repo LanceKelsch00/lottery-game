@@ -1,0 +1,61 @@
+import java.util.Scanner;
+import java.util.Random;
+
+public class Main {
+    public static void main(String[] args) {
+        // Create a Scanner for user input and a Random for generating random numbers
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        // Generate two random integers less than 100
+        int num1 = random.nextInt(100);
+        int num2 = random.nextInt(100);
+
+        // Generate a random operator (0 = +, 1 = -, 2 = *, 3 = %)
+        int operatorIndex = random.nextInt(4);
+
+        char operator = ' ';
+        int correctAnswer = 0;
+
+        // Determine the operator and calculate the correct answer
+        switch (operatorIndex) {
+            case 0:
+                operator = '+';
+                correctAnswer = num1 + num2;
+                break;
+            case 1:
+                operator = '-';
+                correctAnswer = num1 - num2;
+                break;
+            case 2:
+                operator = '*';
+                correctAnswer = num1 * num2;
+                break;
+            case 3:
+                operator = '%';
+                if (num2 == 0) {
+                    num2 = 1; // Avoid division by zero for modulus
+                }
+                correctAnswer = num1 % num2;
+                break;
+        }
+
+        // Print the math question
+        System.out.println("Solve the following equation:");
+        System.out.printf("%d %c %d = ?\n", num1, operator, num2);
+
+        // Get user's answer
+        System.out.print("Your answer: ");
+        int userAnswer = scanner.nextInt();
+
+        // Check if the user's answer is correct
+        if (userAnswer == correctAnswer) {
+            System.out.println("Correct! Great job!");
+        } else {
+            System.out.printf("Wrong! The correct answer is %d.\n", correctAnswer);
+        }
+
+        // Close the scanner
+        scanner.close();
+    }
+}
