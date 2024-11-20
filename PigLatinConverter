@@ -1,0 +1,72 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        boolean continueProgram = true;
+
+        while (continueProgram) {
+            // Step 1: Ask the user to enter a sentence
+            System.out.println("Enter a sentence to convert to Pig Latin:");
+            String sentence = scanner.nextLine();
+
+            // Step 2: Convert the sentence into Pig Latin
+            String pigLatinSentence = convertToPigLatin(sentence);
+
+            // Step 3: Display the Pig Latin version
+            System.out.println("Pig Latin version: " + pigLatinSentence);
+
+            // Step 4: Ask if the user wants to enter another sentence or quit
+            System.out.println("Do you want to enter another sentence? (yes/no):");
+            String response = scanner.nextLine().trim().toLowerCase();
+            if (!response.equals("yes")) {
+                continueProgram = false;
+            }
+        }
+
+        System.out.println("Thank you for using the Pig Latin Converter!");
+        scanner.close();
+    }
+
+    public static String convertToPigLatin(String sentence) {
+        String[] words = sentence.split("\\s+");
+        StringBuilder pigLatinBuilder = new StringBuilder();
+
+        for (String word : words) {
+            pigLatinBuilder.append(convertWordToPigLatin(word)).append(" ");
+        }
+
+        return pigLatinBuilder.toString().trim();
+    }
+
+    public static String convertWordToPigLatin(String word) {
+        // Define vowels
+        String vowels = "aeiouAEIOU";
+        int wordLength = word.length();
+
+        // If the word starts with a vowel
+        if (vowels.indexOf(word.charAt(0)) != -1) {
+            return word + "yay";
+        }
+
+        // If the word starts with a consonant
+        int firstVowelIndex = -1;
+        for (int i = 0; i < wordLength; i++) {
+            if (vowels.indexOf(word.charAt(i)) != -1) {
+                firstVowelIndex = i;
+                break;
+            }
+        }
+
+        // If no vowels are found (unlikely but handle gracefully)
+        if (firstVowelIndex == -1) {
+            return word + "ay";
+        }
+
+        // Split and rearrange the word based on the first vowel
+        String consonantCluster = word.substring(0, firstVowelIndex);
+        String restOfWord = word.substring(firstVowelIndex);
+        return restOfWord + consonantCluster + "ay";
+    }
+}
