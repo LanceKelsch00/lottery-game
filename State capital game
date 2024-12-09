@@ -1,0 +1,76 @@
+import java.io.*;
+import java.util.*;
+
+public class StateCapitalQuiz {
+    
+    // Method to load the state-capital pairs from a file into an ArrayList
+    public static List<String> loadStateCapitals() {
+        List<String> stateCapitalList = new ArrayList<>();
+        try {
+            // Reading from the file where the state-capital pairs are stored
+            File file = new File("StateCapitalArrayList.txt");
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String line;
+            
+            while ((line = reader.readLine()) != null) {
+                stateCapitalList.add(line.trim());  // Add each line (state-capital pair) to the list
+            }
+            reader.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+        
+        return stateCapitalList;
+    }
+
+    // Method to start the quiz game
+    public static void playQuiz() {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Load the state-capital data
+        List<String> stateCapitalList = loadStateCapitals();
+        // Shuffle the list to randomize the order of the states
+        Collections.shuffle(stateCapitalList);
+
+        int correctAnswers = 0;  // Counter for correct answers
+        int totalQuestions = stateCapitalList.size();  // Total number of questions (50 states)
+
+        // Iterate over the shuffled state-capital pairs
+        for (String stateCapital : stateCapitalList) {
+            String[] parts = stateCapital.split(",");  // Split the state and capital
+            String capital = parts[0].trim();
+            String state = parts[1].trim();
+            
+            // Ask the user to guess the capital of the state
+            System.out.println("What is the capital of " + state + "?");
+            String userGuess = scanner.nextLine().trim();
+
+            // Check if the user's guess is correct
+            if (userGuess.equalsIgnoreCase(capital)) {
+                System.out.println("Correct!");
+                correctAnswers++;
+            } else {
+                System.out.println("Wrong! The correct answer is " + capital + ".");
+            }
+        }
+
+        // Display the final score
+        System.out.println("Game over! Your score: " + correctAnswers + " of " + totalQuestions);
+        
+        // Ask if the user wants to play again
+        System.out.print("Do you want to play again? (y/n): ");
+        String playAgain = scanner.nextLine().trim().toLowerCase();
+        
+        // If user types 'y', restart the game
+        if (playAgain.equals("y")) {
+            playQuiz();  // Recursively start a new game
+        } else {
+            System.out.println("Thanks for playing! Goodbye.");
+        }
+    }
+
+    public static void main(String[] args) {
+        // Start the quiz game
+        playQuiz();
+    }
+}
