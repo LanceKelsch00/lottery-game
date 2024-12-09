@@ -1,17 +1,21 @@
+package org.example;
+
+
 import java.io.*;
 import java.util.*;
 
-public class StateCapitalQuiz {
-    
+
+public class Main {
+
     // Method to load the state-capital pairs from a file into an ArrayList
     public static List<String> loadStateCapitals() {
         List<String> stateCapitalList = new ArrayList<>();
         try {
             // Reading from the file where the state-capital pairs are stored
-            File file = new File("StateCapitalArrayList.txt");
+            File file = new File("\\\\741server\\Desktops\\JATC\\Programming\\DataFiles\\StateCapitalQuizAssignmentFiles\\StateCapitals.txt");
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
-            
+
             while ((line = reader.readLine()) != null) {
                 stateCapitalList.add(line.trim());  // Add each line (state-capital pair) to the list
             }
@@ -19,14 +23,14 @@ public class StateCapitalQuiz {
         } catch (IOException e) {
             System.out.println("Error reading file.");
         }
-        
+
         return stateCapitalList;
     }
 
     // Method to start the quiz game
     public static void playQuiz() {
         Scanner scanner = new Scanner(System.in);
-        
+
         // Load the state-capital data
         List<String> stateCapitalList = loadStateCapitals();
         // Shuffle the list to randomize the order of the states
@@ -40,7 +44,7 @@ public class StateCapitalQuiz {
             String[] parts = stateCapital.split(",");  // Split the state and capital
             String capital = parts[0].trim();
             String state = parts[1].trim();
-            
+
             // Ask the user to guess the capital of the state
             System.out.println("What is the capital of " + state + "?");
             String userGuess = scanner.nextLine().trim();
@@ -56,11 +60,11 @@ public class StateCapitalQuiz {
 
         // Display the final score
         System.out.println("Game over! Your score: " + correctAnswers + " of " + totalQuestions);
-        
+
         // Ask if the user wants to play again
         System.out.print("Do you want to play again? (y/n): ");
         String playAgain = scanner.nextLine().trim().toLowerCase();
-        
+
         // If user types 'y', restart the game
         if (playAgain.equals("y")) {
             playQuiz();  // Recursively start a new game
