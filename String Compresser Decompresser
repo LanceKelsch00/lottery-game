@@ -1,0 +1,69 @@
+import java.util.Scanner;
+
+public class StringCompression {
+
+    // Method to compress the input string
+    public static String compress(String input) {
+        StringBuilder compressed = new StringBuilder();
+        int length = input.length();
+        
+        // Traverse through the input string
+        for (int i = 0; i < length; i++) {
+            char currentChar = input.charAt(i);
+            int count = 1;
+            
+            // Count how many times the current character repeats
+            while (i + 1 < length && input.charAt(i + 1) == currentChar) {
+                count++;
+                i++;
+            }
+            
+            // Append the character and its count to the compressed string
+            compressed.append(currentChar).append(count);
+        }
+        
+        return compressed.toString();
+    }
+
+    // Method to decompress the compressed string
+    public static String decompress(String compressed) {
+        StringBuilder decompressed = new StringBuilder();
+        int length = compressed.length();
+        
+        // Traverse through the compressed string
+        for (int i = 0; i < length; i++) {
+            char currentChar = compressed.charAt(i);
+            
+            // If the character is a letter, check the next character for its count
+            if (Character.isLetter(currentChar)) {
+                i++;
+                int count = Character.getNumericValue(compressed.charAt(i));
+                
+                // Repeat the character as per the count
+                for (int j = 0; j < count; j++) {
+                    decompressed.append(currentChar);
+                }
+            }
+        }
+        
+        return decompressed.toString();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Prompt user to input a string
+        System.out.print("Enter a string to compress: ");
+        String input = scanner.nextLine();
+        
+        // Compress the string
+        String compressed = compress(input);
+        System.out.println("Compressed string: " + compressed);
+        
+        // Decompress the string
+        String decompressed = decompress(compressed);
+        System.out.println("Decompressed string: " + decompressed);
+        
+        scanner.close();
+    }
+}
