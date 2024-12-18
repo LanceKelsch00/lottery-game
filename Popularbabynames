@@ -1,0 +1,95 @@
+import java.io.*;
+import java.util.*;
+
+public class BabyNames {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Loop to let the user try different years
+        while (true) {
+            System.out.print("Enter a year (1880 to 2022): ");
+            int year = scanner.nextInt();
+            scanner.nextLine(); // Consume the newline character after nextInt()
+
+            // Validate year range
+            if (year < 1880 || year > 2022) {
+                System.out.println("Invalid year. Please enter a year between 1880 and 2022.");
+                continue;
+            }
+
+            // Read the data for the given year
+            List<NameData> boyNames = readNamesFromFile(year, "M");
+            List<NameData> girlNames = readNamesFromFile(year, "F");
+
+            // Display the top 25 boy and girl names
+            System.out.println("\nTop 25 Boy Names in " + year + ":");
+            displayTopNames(boyNames);
+            System.out.println("\nTop 25 Girl Names in " + year + ":");
+            displayTopNames(girlNames);
+
+            // Ask the user if they want to try again
+            System.out.print("\nDo you want to try again? (y/n): ");
+            String response = scanner.nextLine().trim().toLowerCase();
+            if (!response.equals("y")) {
+                break;
+            }
+        }
+
+        scanner.close();
+    }
+
+    // Method to read the names from the file for the given year and gender
+    public static List<NameData> readNamesFromFile(int year, String gender) {
+        List<NameData> names = new ArrayList<>();
+        String fileName = "yob" + year + ".txt";
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                String name = parts[0].trim();
+                String fileGender = parts[1].trim();
+                int occurrences = Integer.parseInt(parts[2].trim());
+
+                if (fileGender.equals(gender)) {
+                    names.add(new NameData(name, occurrences));
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file " + fileName);
+        }
+
+        // Sort names by occurrences in descending order
+        names.sort((n1, n2) -> Integer.compare(n2.getOccurrences(), n1.getOccurrences()));
+
+        // Return the top 25 names (or less if not enough data)
+        return names.size() > 25 ? names.subList(0, 25) : names;
+    }
+
+    // Method to display the top names
+    public static void displayTopNames(List<NameData> names) {
+        for (int i = 0; i < names.size(); i++) {
+            System.out.printf("%d. %s (%d occurrences)\n", i + 1, names.get(i).getName(), names.get(i).getOccurrences());
+        }
+    }
+
+    // NameData class to store the name and occurrences
+    public static class NameData {
+        private String name;
+        private int occurrences;
+
+        public NameData(String name, int occurrences) {
+            this.name = name;
+            this.occurrences = occurrences;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getOccurrences() {
+            return occurrences;
+        }
+    }
+}
