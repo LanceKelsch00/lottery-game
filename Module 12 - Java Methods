@@ -1,0 +1,44 @@
+public double sqrt(int number) { / code / }
+How do you declare a method that returns the square root of a number?
+
+public final void methodName() { / code / }
+How do you define a method that will be inherited but not overridden in a subclass?
+
+public boolean methodName(String s) { / code / }
+Which method signature is correct for a method that returns a boolean and takes one String parameter?
+
+person.setName(“John”);
+How do you call a method setName that is part of the Person class with an argument "John"?
+
+Hello, World!
+What is the output of the following code? public class Main { public static void displayMessage() { System.out.println(“Hello, World!”); } public static void main(String[] args) { displayMessage(); } }
+
+To define multiple methods with the same name but different parameters.
+What is the purpose of method overloading?
+
+Alice is 30 years old.
+What will be the output of the following code? public class Main { public static void printInfo(String name, int age) { System.out.println(name + ” is ” + age + ” years old.”); } public static void main(String[] args) { printInfo(“Alice”, 30); } }
+
+public void methodName(int… values) { / code / }
+How do you define a method that accepts a variable number of arguments?
+
+1 2 3
+What will be the output of the following code? public class Main { public static void printArray(int[] arr) { for (int num : arr) { System.out.print(num + ” “); } } public static void main(String[] args) { int[] numbers = {1, 2, 3}; printArray(numbers); } }
+
+public static void methodName() { / code / }
+How do you define a method that can be called without creating an instance of its class?
+
+9
+What is the output of the following code? public class Main { public static void printSum(int x, int y) { System.out.println(x + y); } public static void main(String[] args) { printSum(4, 5); } }
+
+public void methodName(int a, String b) { / code / }
+What is the correct way to declare a method that does not return a value and accepts multiple parameters?
+
+public double max(double a, double b) { / code / }
+How do you declare a method that returns the maximum of two double values?
+
+7.0
+What will be the result of the following code? public class Main { public static void printSum(double a, double b) { System.out.println(a + b); } public static void main(String[] args) { printSum(3, 4); } }
+
+1 2 3
+What will be the output of the following code? public class Main { public static void printNumbers(int n) { for (int i = 1; i <= n; i++) { System.out.print(i + ” “); } } public static void main(String[] args) { printNumbers(3); } }
