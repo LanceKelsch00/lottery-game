@@ -1,0 +1,68 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class CaesarCipherDecipher {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Ask for the file name and shift value
+        System.out.print("Enter the full path of the file you want to decrypt: ");
+        String filePath = scanner.nextLine();
+        
+        System.out.print("Enter the shift value used for encryption (1 to 25): ");
+        int shift = scanner.nextInt();
+        scanner.nextLine();  // Consume the newline character
+
+        // Read the content from the file and decrypt it
+        String content = readFile(filePath);
+        
+        if (content != null) {
+            String decryptedText = decryptCaesarCipher(content, shift);
+            System.out.println("\nDecrypted Text:");
+            System.out.println(decryptedText);
+        }
+
+        scanner.close();
+    }
+
+    // Method to read the file
+    public static String readFile(String filePath) {
+        StringBuilder content = new StringBuilder();
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");  // Append the line to the content
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading the file: " + e.getMessage());
+            return null;
+        }
+
+        return content.toString();
+    }
+
+    // Method to decrypt the Caesar Cipher
+    public static String decryptCaesarCipher(String text, int shift) {
+        StringBuilder decryptedText = new StringBuilder();
+        
+        for (int i = 0; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            
+            // Decrypt uppercase letters
+            if (Character.isUpperCase(ch)) {
+                ch = (char) (((ch - 'A' - shift + 26) % 26) + 'A');
+            }
+            // Decrypt lowercase letters
+            else if (Character.isLowerCase(ch)) {
+                ch = (char) (((ch - 'a' - shift + 26) % 26) + 'a');
+            }
+            
+            // Append the character to the result
+            decryptedText.append(ch);
+        }
+
+        return decryptedText.toString();
+    }
+}
