@@ -1,0 +1,106 @@
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+
+public class HangmanGame {
+    
+    // Stick figure body parts
+    private static final String[] hangmanParts = {
+        " O ", // Head
+        " | ", // Body
+        "/|\\", // Arms
+        " | ", // Legs (top)
+        "/ \\" // Legs (bottom)
+    };
+    
+    public static void main(String[] args) {
+        // Initialize word list
+        ArrayList<String> words = new ArrayList<>();
+        // Normally, you'd load this list from a network drive or file
+        words.add("train");
+        words.add("java");
+        words.add("programming");
+        words.add("computer");
+        words.add("hangman");
+        
+        // Randomly select a word
+        Random rand = new Random();
+        String word = words.get(rand.nextInt(words.size()));
+        char[] wordToGuess = word.toCharArray();
+        char[] guessedWord = new char[word.length()];
+        
+        // Initialize the guessed word array with underscores
+        for (int i = 0; i < word.length(); i++) {
+            guessedWord[i] = '_';
+        }
+        
+        // Set up a list for guessed letters and the number of incorrect guesses
+        ArrayList<Character> guessedLetters = new ArrayList<>();
+        int incorrectGuesses = 0;
+        
+        // Scanner to read user input
+        Scanner scanner = new Scanner(System.in);
+        
+        // Main game loop
+        while (incorrectGuesses < hangmanParts.length && new String(guessedWord).contains("_")) {
+            System.out.println("Current word: " + displayWord(guessedWord));
+            System.out.print("Guessed letters: " + guessedLetters + "\n");
+            printHangman(incorrectGuesses);
+            
+            System.out.print("Enter a letter to guess: ");
+            char guess = scanner.next().toLowerCase().charAt(0);
+            
+            // Check if letter was guessed before
+            if (guessedLetters.contains(guess)) {
+                System.out.println("You already guessed that letter!");
+                continue;
+            }
+            
+            guessedLetters.add(guess);
+            
+            // Check if the guessed letter is in the word
+            boolean correctGuess = false;
+            for (int i = 0; i < word.length(); i++) {
+                if (wordToGuess[i] == guess) {
+                    guessedWord[i] = guess;
+                    correctGuess = true;
+                }
+            }
+            
+            if (!correctGuess) {
+                incorrectGuesses++;
+            }
+        }
+        
+        // Final result
+        printHangman(incorrectGuesses);
+        if (new String(guessedWord).contains("_")) {
+            System.out.println("You lost! The word was: " + word);
+        } else {
+            System.out.println("Congratulations, you won! The word was: " + word);
+        }
+        
+        scanner.close();
+    }
+    
+    // Function to print the hangman figure based on the number of incorrect guesses
+    private static void printHangman(int incorrectGuesses) {
+        System.out.println("Hangman:");
+        for (int i = 0; i < incorrectGuesses; i++) {
+            System.out.println(hangmanParts[i]);
+        }
+        // Print remaining parts as empty spaces
+        for (int i = incorrectGuesses; i < hangmanParts.length; i++) {
+            System.out.println("   ");
+        }
+    }
+    
+    // Function to display the current state of the word with underscores
+    private static String displayWord(char[] word) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : word) {
+            sb.append(c).append(" ");
+        }
+        return sb.toString().trim();
+    }
+}
