@@ -1,0 +1,29 @@
+FileNotFoundException
+What exception is thrown if a file is not found when using Scanner?
+
+PrintWriter printWriter = new PrintWriter(new FileWriter(“filename.txt”, true));
+How do you append text to an existing file using PrintWriter?
+
+scanner.next()
+How do you read a single word from a file using Scanner?
+
+printf()
+Which method is used to write a formatted string to a file using PrintWriter?
+
+hasNext()
+What method of Scanner is used to check if there is more input available?
+
+Scanner
+Which class is used to read text from a file in Java?
+
+It flushes the output stream and closes the file.
+What happens if you call close() on a PrintWriter object?
+
+printWriter.println(“text”);
+How do you write a string to a file using PrintWriter?
+
+Writes a string and adds a newline character.
+What does the println() method of PrintWriter do?
+
+nextLine()
+Which method of Scanner reads an entire line from a file?
