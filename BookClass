@@ -1,0 +1,58 @@
+import java.time.LocalDate;
+
+public class Main {
+    private String title;
+    private String author;
+    private String publisher;
+    private LocalDate publishDate;
+    private String isbn;
+    private LocalDate checkOutDate;
+    private LocalDate checkInDate;
+    private boolean isCheckedOut;
+
+    public Main(String title, String author, String publisher, LocalDate publishDate, String isbn) {
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.publishDate = publishDate;
+        this.isbn = isbn;
+        this.isCheckedOut = false;
+    }
+    public void checkOut(LocalDate date) {
+        this.checkOutDate = date;
+        this.isCheckedOut = true;
+    }
+    public void checkIn(LocalDate date) {
+        this.checkInDate = date;
+        this.isCheckedOut = false;
+    }
+    public boolean isCheckedOut() {
+        return isCheckedOut;
+    }
+    public String getTitle() {
+        return title;
+    }
+    public String getAuthor() {
+        return author;
+    }
+    public String getPublisher() {
+        return publisher;
+    }
+    public LocalDate getPublishDate() {
+        return publishDate;
+    }
+    public String getIsbn() {
+        return isbn;
+    }
+    public static void main(String[] args) {
+        Main book1 = new Main("1984", "George Orwell", "Secker & Warburg", LocalDate.of(1949, 6, 8), "123-4567890123");
+        Main book2 = new Main("To Kill a Mockingbird", "Harper Lee", "J.B. Lippincott & Co.", LocalDate.of(1960, 7, 11), "987-6543210987");
+        Main book3 = new Main("The Great Gatsby", "F. Scott Fitzgerald", "Charles Scribner's Sons", LocalDate.of(1925, 4, 10), "111-2223334445");
+        book1.checkOut(LocalDate.now());
+        book2.checkOut(LocalDate.now());
+        book2.checkIn(LocalDate.now().plusDays(7));
+        System.out.println(book1.getTitle() + " by " + book1.getAuthor() + " is checked out: " + book1.isCheckedOut());
+        System.out.println(book2.getTitle() + " by " + book2.getAuthor() + " is checked out: " + book2.isCheckedOut());
+        System.out.println(book3.getTitle() + " by " + book3.getAuthor() + " is checked out: " + book3.isCheckedOut());
+    }
+}
