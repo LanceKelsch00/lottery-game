@@ -1,0 +1,55 @@
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
+public class ChineseZodiacGame extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("zodiac.fxml"));
+        AnchorPane root = loader.load();
+        Scene scene = new Scene(root);
+        primaryStage.setTitle("Chinese Zodiac Game");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+
+class ZodiacController {
+    public TextField birthYearField;
+    public Button findZodiacButton;
+    public Button quitButton;
+    public ImageView zodiacImage;
+    public Label errorLabel;
+    
+    private final String[] zodiacImages = {"monkey.png", "rooster.png", "dog.png", "pig.png", "rat.png", "ox.png", "tiger.png", "rabbit.png", "dragon.png", "snake.png", "horse.png", "sheep.png"};
+    
+    public void findZodiac() {
+        try {
+            int year = Integer.parseInt(birthYearField.getText().trim());
+            if (year < 1000 || year > 9999) {
+                errorLabel.setText("Please enter a valid 4-digit year.");
+                return;
+            }
+            int zodiacIndex = year % 12;
+            zodiacImage.setImage(new Image(getClass().getResourceAsStream(zodiacImages[zodiacIndex])));
+            errorLabel.setText("");
+        } catch (NumberFormatException e) {
+            errorLabel.setText("Invalid input. Please enter a 4-digit year.");
+        }
+    }
+    
+    public void quitGame() {
+        System.exit(0);
+    }
+}
