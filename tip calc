@@ -1,0 +1,69 @@
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
+public class TipCalculator extends Application {
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Tip Calculator");
+
+        // Create labels
+        Label billLabel = new Label("Bill Amount:");
+        Label tipLabel = new Label("Tip Percentage:");
+        Label tipAmountLabel = new Label("Tip Amount:");
+        Label totalLabel = new Label("Total Bill:");
+
+        // Create text fields
+        TextField billField = new TextField();
+        TextField tipField = new TextField();
+        
+        // Create result labels
+        Label tipAmountResult = new Label("$");
+        Label totalResult = new Label("$");
+        
+        // Create button
+        Button calculateButton = new Button("Calculate");
+        calculateButton.setOnAction(e -> {
+            try {
+                double billAmount = Double.parseDouble(billField.getText());
+                double tipPercentage = Double.parseDouble(tipField.getText());
+                
+                double tipAmount = (tipPercentage / 100) * billAmount;
+                double totalBill = billAmount + tipAmount;
+                
+                tipAmountResult.setText("$" + String.format("%.2f", tipAmount));
+                totalResult.setText("$" + String.format("%.2f", totalBill));
+            } catch (NumberFormatException ex) {
+                tipAmountResult.setText("Invalid Input");
+                totalResult.setText("Invalid Input");
+            }
+        });
+
+        // Layout setup
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10));
+        grid.setVgap(8);
+        grid.setHgap(10);
+        
+        grid.add(billLabel, 0, 0);
+        grid.add(billField, 1, 0);
+        grid.add(tipLabel, 0, 1);
+        grid.add(tipField, 1, 1);
+        grid.add(calculateButton, 1, 2);
+        grid.add(tipAmountLabel, 0, 3);
+        grid.add(tipAmountResult, 1, 3);
+        grid.add(totalLabel, 0, 4);
+        grid.add(totalResult, 1, 4);
+
+        Scene scene = new Scene(grid, 300, 200);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+    
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
