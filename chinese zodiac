@@ -53,3 +53,9 @@ class ZodiacController {
         System.exit(0);
     }
 }
+"C:\Program Files\Java\jdk-21\bin\java.exe" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2024.3\lib\idea_rt.jar=58191:C:\Program Files\JetBrains\IntelliJ IDEA 2024.3\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath C:\Users\kelsclan000\.m2\repository\org\openjfx\javafx-controls\21\javafx-controls-21.jar;C:\Users\kelsclan000\.m2\repository\org\openjfx\javafx-graphics\21\javafx-graphics-21.jar;C:\Users\kelsclan000\.m2\repository\org\openjfx\javafx-base\21\javafx-base-21.jar;C:\Users\kelsclan000\.m2\repository\org\openjfx\javafx-fxml\21\javafx-fxml-21.jar -p C:\Users\kelsclan000\.m2\repository\org\openjfx\javafx-base\21\javafx-base-21-win.jar;C:\Users\kelsclan000\.m2\repository\org\openjfx\javafx-fxml\21\javafx-fxml-21-win.jar;C:\Users\kelsclan000\.m2\repository\org\openjfx\javafx-controls\21\javafx-controls-21-win.jar;C:\Users\kelsclan000\IdeaProjects\tipcalc\target\classes;C:\Users\kelsclan000\.m2\repository\org\openjfx\javafx-graphics\21\javafx-graphics-21-win.jar -m org.example.tipcalc/TipCalculator
+Error occurred during initialization of boot layer
+java.lang.module.FindException: Error reading module: C:\Users\kelsclan000\IdeaProjects\tipcalc\target\classes
+Caused by: java.lang.module.InvalidModuleDescriptorException: TipCalculator.class found in top-level directory (unnamed package not allowed in module)
+
+Process finished with exit code 1
