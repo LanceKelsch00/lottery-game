@@ -1,0 +1,156 @@
+package org.example.countryflaggame;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.*;
+
+public class HelloController {
+    @FXML
+    private ImageView flagImageView;
+    @FXML
+    private Button option1, option2, option3, option4;
+    @FXML
+    private Label scoreLabel;
+
+    private final List<String> countries = new ArrayList<>();
+    private final Map<String, String> countryMap = new HashMap<>();
+    private String correctCountry;
+    private int correctCount = 0;
+    private int totalCount = 0;
+
+    public void initialize() {
+        loadCountries();
+        nextFlag();
+    }
+
+    private void loadCountries() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("\\\\JATC\\desktop\\Programming\\Resources\\CountryFlagGame\\CountryNames.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 2) {
+                    countries.add(parts[0]);
+                    countryMap.put(parts[0], parts[1]);
+                }
+            }
+        } catch (IOException e) {
+            showAlert("Error", "Could not load country data.");
+        }
+        Collections.shuffle(countries);
+    }
+
+    private void nextFlag() {
+        if (countries.isEmpty()) {
+            playAgainPrompt();
+            return;
+        }
+
+        correctCountry = countries.remove(0);
+        String flagFile = countryMap.get(correctCountry) + ".png";
+        flagImageView.setImage(new Image("file:\\\\JATC\\desktop\\Programming\\Resources\\CountryFlagGame\\" + flagFile));
+
+        List<String> options = new ArrayList<>(countries);
+        Collections.shuffle(options);
+        options = options.subList(0, 3);
+        options.add(correctCountry);
+        Collections.shuffle(options);
+
+        option1.setText(options.get(0));
+        option2.setText(options.get(1));
+        option3.setText(options.get(2));
+        option4.setText(options.get(3));
+    }
+
+    @FXML
+    private void handleSelection(javafx.event.ActionEvent event) {
+        Button clickedButton = (Button) event.getSource();
+        totalCount++;
+        if (clickedButton.getText().equals(correctCountry)) {
+            correctCount++;
+            showAlert("Correct!", "You got it right!");
+        } else {
+            showAlert("Wrong!", "The correct answer was " + correctCountry);
+        }
+        scoreLabel.setText(correctCount + " / " + totalCount);
+        nextFlag();
+    }
+
+    @FXML
+    private void quitGame() {
+        Stage stage = (Stage) flagImageView.getScene().getWindow();
+        stage.close();
+    }
+
+    private void playAgainPrompt() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText("You've guessed all countries!");
+        alert.setContentText("Do you want to play again?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            resetGame();
+        } else {
+            quitGame();
+        }
+    }
+
+    private void resetGame() {
+        countries.clear();
+        countryMap.clear();
+        correctCount = 0;
+        totalCount = 0;
+        scoreLabel.setText("0 / 0");
+        loadCountries();
+        nextFlag();
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+}
+
+
+:
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.countryflaggame.HelloController">
+    <ImageView fx:id="flagImageView" fitHeight="206.0" fitWidth="295.0" />
+
+    <GridPane hgap="10" prefHeight="60.0" prefWidth="109.0" vgap="10">
+        <Button fx:id="option1" onAction="#handleSelection" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <Button fx:id="option2" onAction="#handleSelection" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Button fx:id="option3" onAction="#handleSelection" prefHeight="25.0" prefWidth="14.0" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Button fx:id="option4" onAction="#handleSelection" prefHeight="25.0" prefWidth="7.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <columnConstraints>
+         <ColumnConstraints maxWidth="32.0" minWidth="21.0" prefWidth="32.0" />
+         <ColumnConstraints maxWidth="11.0" minWidth="0.0" prefWidth="0.0" />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
+
+    <Label fx:id="scoreLabel" text="0 / 0" />
+    <Button onAction="#quitGame" text="Quit" />
+</VBox>
+
