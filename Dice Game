@@ -1,0 +1,112 @@
+package org.example.threedicegame;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.util.Random;
+
+public class HelloController {
+    @FXML
+    private ImageView dice1, dice2, dice3;
+    @FXML
+    private Label resultLabel, scoreLabel, totalScoreLabel;
+
+    private final Random random = new Random();
+    private int totalScore = 0;
+    private int round = 0;
+
+    private final Image[] diceImages = {
+            new Image(getClass().getResourceAsStream("\\\\\\\\741server\\\\Desktops\\\\JATC\\\\Programming\\\\Resources\\\\ThreeDice\\\\DiceOne.png")),
+            new Image(getClass().getResourceAsStream("\\\\\\\\741server\\\\Desktops\\\\JATC\\\\Programming\\\\Resources\\\\ThreeDice\\\\DiceTwo.png")),
+            new Image(getClass().getResourceAsStream("\\\\\\\\741server\\\\Desktops\\\\JATC\\\\Programming\\\\Resources\\\\ThreeDice\\\\DiceThree.png")),
+            new Image(getClass().getResourceAsStream("\\\\\\\\741server\\\\Desktops\\\\JATC\\\\Programming\\\\Resources\\\\ThreeDice\\\\DiceFour.png")),
+            new Image(getClass().getResourceAsStream("\\\\\\\\741server\\\\Desktops\\\\JATC\\\\Programming\\\\Resources\\\\ThreeDice\\\\DiceFive.png")),
+            new Image(getClass().getResourceAsStream("\\\\\\\\741server\\\\Desktops\\\\JATC\\\\Programming\\\\Resources\\\\ThreeDice\\\\DiceSix.png"))
+    };
+
+    @FXML
+    private void rollDice() {
+        if (round >= 10) {
+            showGameOverAlert();
+            return;
+        }
+
+        int roll1 = random.nextInt(6) + 1;
+        int roll2 = random.nextInt(6) + 1;
+        int roll3 = random.nextInt(6) + 1;
+
+        dice1.setImage(diceImages[roll1 - 1]);
+        dice2.setImage(diceImages[roll2 - 1]);
+        dice3.setImage(diceImages[roll3 - 1]);
+
+        int score = calculateScore(roll1, roll2, roll3);
+        totalScore += score;
+        round++;
+
+        scoreLabel.setText("Score: " + score);
+        totalScoreLabel.setText("Total Score: " + totalScore);
+
+        if (round == 10) {
+            showGameOverAlert();
+        }
+    }
+
+    private int calculateScore(int d1, int d2, int d3) {
+        if (d1 == d2 && d2 == d3) {
+            resultLabel.setText("Three of a kind! +6 points");
+            return 6;
+        } else if (d1 == d2 || d1 == d3 || d2 == d3) {
+            resultLabel.setText("Two of a kind! +3 points");
+            return 3;
+        } else {
+            resultLabel.setText("No match. +1 point");
+            return 1;
+        }
+    }
+
+    private void showGameOverAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Game Over");
+        alert.setHeaderText("Final Score: " + totalScore);
+        alert.setContentText("Do you want to play again?");
+        alert.showAndWait();
+
+        resetGame();
+    }
+
+    private void resetGame() {
+        totalScore = 0;
+        round = 0;
+        totalScoreLabel.setText("Total Score: 0");
+        scoreLabel.setText("Score: 0");
+        resultLabel.setText("Roll the dice!");
+    }
+}
+
+
+:
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.threedicegame.HelloController">
+    <VBox alignment="CENTER" spacing="10.0" layoutX="50" layoutY="50">
+        <HBox spacing="10" alignment="CENTER">
+            <ImageView fx:id="dice1" fitWidth="100" fitHeight="100" />
+            <ImageView fx:id="dice2" fitWidth="100" fitHeight="100" />
+            <ImageView fx:id="dice3" fitWidth="100" fitHeight="100" />
+        </HBox>
+        <Label fx:id="resultLabel" text="Roll the dice!" />
+        <Label fx:id="scoreLabel" text="Score: 0" />
+        <Label fx:id="totalScoreLabel" text="Total Score: 0" />
+        <Button text="Roll Dice" onAction="#rollDice" />
+    </VBox>
+</AnchorPane>
