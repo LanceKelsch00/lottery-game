@@ -1,0 +1,117 @@
+fxml:
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.currencyconverter.HelloController">
+    <Text text="Currency Converter" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+    <TextField fx:id="amountField" promptText="Enter amount in USD"/>
+    <Spinner fx:id="currencySpinner" />
+    <Button fx:id="convertButton" text="Convert" onAction="#convertCurrency"/>
+    <Text fx:id="resultText"/>
+    <ImageView fx:id="flagImage" fitWidth="100" fitHeight="60"/>
+</VBox>
+  HelloController:
+package org.example.currencyconverter;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
+public class HelloController {
+    @FXML
+    private TextField amountField;
+    @FXML
+    private Spinner<String> currencySpinner;
+    @FXML
+    private Button convertButton;
+    @FXML
+    private Text resultText;
+    @FXML
+    private ImageView flagImage;
+
+    private final String API_URL = "https://open.er-api.com/v6/latest/usd";
+
+    private final String[] currencies = {"JPY", "CNY", "EUR", "GBP", "MXN", "RUB", "AUD", "CAD", "CHF", "INR"};
+
+    @FXML
+    public void initialize() {
+        currencySpinner.setValueFactory(new SpinnerValueFactory.ListSpinnerValueFactory<>(javafx.collections.FXCollections.observableArrayList(currencies)));
+    }
+
+    @FXML
+    private void convertCurrency() {
+        try {
+            double amount = Double.parseDouble(amountField.getText());
+            String selectedCurrency = currencySpinner.getValue();
+            double exchangeRate = getExchangeRate(selectedCurrency);
+            double convertedAmount = amount * exchangeRate;
+            resultText.setText(String.format("%.2f USD = %.2f %s", amount, convertedAmount, selectedCurrency));
+            updateFlag(selectedCurrency);
+        } catch (NumberFormatException e) {
+            resultText.setText("Please enter a valid number.");
+        } catch (IOException e) {
+            resultText.setText("Error fetching exchange rates.");
+        }
+    }
+
+    private double getExchangeRate(String currency) throws IOException {
+        URL url = new URL(API_URL);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.connect();
+
+        Scanner scanner = new Scanner(url.openStream());
+        StringBuilder jsonString = new StringBuilder();
+        while (scanner.hasNext()) {
+            jsonString.append(scanner.nextLine());
+        }
+        scanner.close();
+
+        JSONObject jsonObject = new JSONObject(jsonString.toString());
+        return jsonObject.getJSONObject("rates").getDouble(currency);
+    }
+
+    private void updateFlag(String currency) {
+        String flagPath = "/flags/" + currency.toLowerCase() + ".png"; // Ensure correct path
+        flagImage.setImage(new Image(getClass().getResourceAsStream(flagPath)));
+    }
+}
+HelloApplication:
+package org.example.currencyconverter;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
+public class HelloApplication extends Application {
+    @Override
+    public void start(Stage stage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        stage.setTitle("Hello!");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void main(String[] args) {
+        launch();
+    }
+}
